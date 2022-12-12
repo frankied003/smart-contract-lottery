@@ -1,0 +1,23 @@
+dependecies:
+  - smartcontractkit/chainlink-brownie-contracts@0.5.1
+  - OpenZeppelin/openzeppelin-contracts@4.3.2
+  - solady/src
+dotenv: .env
+compiler:
+  solc:
+    remappings:
+      - "@chainlink=smartcontractkit/chainlink-brownie-contracts@0.5.1"
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.3.2"
+      - "@solady=solady/src"
+networks:
+  default: development
+  goerli:
+    verify: Truee
+  rinkeby:
+    verify: False
+  mainnet:
+    verify: True
+wallets:
+  from_key: ${MAINNET_PRIVATE_KEY}
+  from_test_key: ${TEST_PRIVATE_KEY}
+  from_public_key: ${PUBLIC_PRIVATE_KEY}
