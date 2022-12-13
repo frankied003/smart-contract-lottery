@@ -66,12 +66,11 @@ contract Lottery is VRFConsumerBaseV2, Ownable {
     address payable[] public players;
     address[] public winners;
     address payable public lotteryVault;
-    uint256 public lotteryId;
     uint256 public entryFee = 0.01 ether;
 
     enum LOTTERY_STATE {
-        OPEN,
         CLOSED,
+        OPEN,
         PICKING_WINNER
     }
     LOTTERY_STATE public lottery_state;
@@ -85,7 +84,7 @@ contract Lottery is VRFConsumerBaseV2, Ownable {
     /// @dev The gas lane to use, which specifies the maximum gas price to bump to.
     bytes32 keyHash =
         0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15;
-    uint32 callbackGasLimit = 100000;
+    uint32 callbackGasLimit = 200000;
 
     /// @dev The default is 3, but can set this higher.
     uint16 requestConfirmations = 3;
@@ -111,6 +110,11 @@ contract Lottery is VRFConsumerBaseV2, Ownable {
             0x2Ca8E0C643bDe4C2E08ab1fA0da3401AdAD7734D
         );
         s_subscriptionId = subscriptionId;
+    }
+
+    /// @notice Setting lottery vault address, orignally set to owner
+    function setLotteryVault(address payable vault) external onlyOwner {
+        lotteryVault = vault;
     }
 
     /// @notice Function called by tx signer to enter the lottery.
@@ -139,7 +143,7 @@ contract Lottery is VRFConsumerBaseV2, Ownable {
         requestRandomWords();
     }
 
-    /// Assumes the subscription is funded sufficiently.
+    /// @notice Assumes the subscription is funded sufficiently.
     function requestRandomWords() internal returns (uint256 requestId) {
         /// Will revert if subscription is not set and funded.
         requestId = COORDINATOR.requestRandomWords(
@@ -183,10 +187,9 @@ contract Lottery is VRFConsumerBaseV2, Ownable {
 
         /// Transfer balance.
         players[indexOfWinner].transfer((address(this).balance * 95) / 100);
-        lotteryVault.transfer((address(this).balance * 5) / 100);
+        lotteryVault.transfer(address(this).balance);
 
         /// Reset.
-        lotteryId++;
         players = new address payable[](0);
         lottery_state = LOTTERY_STATE.CLOSED;
     }
