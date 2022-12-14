@@ -81,7 +81,7 @@ contract Lottery is VRFConsumerBaseV2, Ownable {
     uint256[] public requestIds;
     uint256 public lastRequestId;
 
-    /// @dev The gas lane to use, which specifies the maximum gas price to bump to.
+    /// @dev The gas lane to use, which specifies the maximum gas price to bump to. 200k is max, current function is close to that limit.
     bytes32 keyHash =
         0x79d3d8832d904592c0bf9818b621522c988bb8b0c05cdc3b15aea1b6e8db0c15;
     uint32 callbackGasLimit = 200000;
