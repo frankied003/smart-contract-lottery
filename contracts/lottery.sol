@@ -164,6 +164,19 @@ contract Lottery is VRFConsumerBaseV2, Ownable {
         return requestId;
     }
 
+    /// @notice Read functions.
+    function getLotteryNumber() public view returns (uint256) {
+        return winners.length + 1;
+    }
+
+    function getPotAmount() public view returns (uint256) {
+        return (address(this).balance * 95) / 100;
+    }
+
+    function getLastWinner() public view returns (address) {
+        return winners[winners.length - 1];
+    }
+
     /// @dev Chainlink VRF fulfills the request and returns the random values to your contract in a callback to the fulfillRandomWords() function.
     /// At this point, a new key requestId is added to the mapping s_requests.
     /// @notice Function used to fullfill the random number request, pay out winner, and reset for next lottery.

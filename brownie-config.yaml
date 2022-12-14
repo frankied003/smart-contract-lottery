@@ -12,7 +12,7 @@ compiler:
 networks:
   default: development
   goerli:
-    verify: Truee
+    verify: True
   rinkeby:
     verify: False
   mainnet:
